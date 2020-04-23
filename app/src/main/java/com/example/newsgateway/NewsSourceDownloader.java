@@ -4,83 +4,140 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 
-public class NewsSourceDownloader extends AsyncTask<Void, Void, Void>
+public class NewsSourceDownloader extends AsyncTask<Void, Void, Map<String, ArrayList<Source>>>
 {
+
     private MainActivity mainActivity;
-    //private String header = "https://newsapi.org/v2/sources?language=en&country=us&category=&apiKey=";
-    private String ApiUrl =  "https://newsapi.org/v2/sources?language=en&country=us&category=&apiKey=" + "19084f873f6647ce84cc3790330842f0";
-
-    // = String.format("%s%s", header, mainActivity.getApplicationContext().getString(R.string.API_KEY));
-
-    //private String api_key = "19084f873f6647ce84cc3790330842f0";
 
      private static String TAG = "AsyncActivity";
 
-     StringBuilder sb = new StringBuilder();
-      JSONObject jsonObject;
+      NewsSourceDownloader(MainActivity mainActivity)
+      {
+          this.mainActivity = mainActivity;
+      }
 
-//    NewsSourceDownloader(MainActivity ma)
-//    {
-//        mainActivity = ma;
-//        ApiUrl = String.format("%s%s", header,
-//                mainActivity.getApplicationContext().getString(R.string.API_KEY));
-//    }
-
-    //make the connection to the API
     @Override
-    protected Void doInBackground(Void... voids)
+    protected Map<String, ArrayList<Source>> doInBackground(Void... voids)
     {
-        //convert string url to uri format
-        Uri uri = Uri.parse(ApiUrl);
-        String urlToUse = uri.toString();
+        JSONObject jsonObject = getUrls();
+         if(jsonObject == null)
+             return null;
 
-        Log.d(TAG, "doInBackground: " + urlToUse);
-        //StringBuilder sb = new StringBuilder();
+         return parseUrls(jsonObject);
+    }
+
+    @Override
+    protected void onPostExecute(Map<String, ArrayList<Source>> stringArrayListMap)
+    {
+        mainActivity.onPostDownload(stringArrayListMap);
+    }
+
+    // get all the data from the api into a JSON object
+    private JSONObject getUrls()
+    {
+        String url = String.format("%s%s", mainActivity.getApplicationContext().getString(R.string.api_url),
+                mainActivity.getApplicationContext().getString(R.string.API_KEY));
+        JSONObject jsonObject = null;
+        String urlToUse = Uri.parse(url).toString();
 
         try
         {
-            //make the uri into a URL format that the browser understands
-            URL url = new URL(urlToUse);
+            URL url_ = new URL(urlToUse);
+            HttpURLConnection con = (HttpURLConnection) url_.openConnection();
 
-            //connection object to connect to the API
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            if(con.getResponseCode() != HttpURLConnection.HTTP_OK)
+                throw(new Exception());
 
-            if (con.getResponseCode() != HttpURLConnection.HTTP_OK)
-            {
-                return null;
-            }
-            //set the method to retrieve the data from the api
             con.setRequestMethod("GET");
 
-            //input stream will get the data
             InputStream inputStream = con.getInputStream();
 
-            //buffered  reader will read the data from the source
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-
             String line;
+            StringBuilder sb = new StringBuilder();
+
             while((line=bufferedReader.readLine()) != null)
             {
                 sb.append(line).append('\n');
             }
+
             jsonObject = new JSONObject(sb.toString());
-            Log.d(TAG, "doInBackground: " + jsonObject.toString());
+            return jsonObject;
+
         }
-        catch (Exception e)
+        catch(Exception e)
         {
-            Log.d(TAG, "doInBackground: ", e);
-            return null;
+            e.printStackTrace();
+            return jsonObject;
         }
-        return null;
+    }
+
+    //parse the JSON object that you received earlier
+    //it is an array of JSON object
+    private Map<String, ArrayList<Source>> parseUrls(JSONObject jsonObject)
+    {
+        //this will store the array of JSON objects
+        Map<String, ArrayList<Source>> sourcesMap = new TreeMap<>();
+
+        try
+        {
+            if(jsonObject.has("sources"))
+            {
+                JSONArray sourcesArray = jsonObject.getJSONArray("sources");
+                for(int i = 0; i<=sourcesArray.length(); i++)
+                {
+                    //get each json object from the array
+                    JSONObject sourceObject = sourcesArray.getJSONObject(i);
+
+                    //look for the fields that we are interested in and check if it is null
+                    String name = sourceObject.getString("name");
+                    if("name".equals(null))
+                        continue;
+                    String id = sourceObject.getString("id");
+                    if("id".equals(null))
+                        continue;
+                    String category = sourceObject.getString("category");
+                    if("category".equals((null)))
+                        continue;
+
+                    //make an object of the Source class
+                    Source source = new Source(name,category,id);
+
+                    ArrayList<Source> arrayList = sourcesMap.get(source.getCategory());
+                    if(arrayList == null)
+                    {
+                        arrayList = new ArrayList<>();
+                        arrayList.add(source);
+                        sourcesMap.put(source.getCategory(), arrayList);
+                    }
+                    else
+                    {
+                        arrayList.add(source);
+                    }
+                }
+            }
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            return sourcesMap;
+        }
+
     }
 }

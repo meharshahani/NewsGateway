@@ -13,14 +13,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 public class MainActivity extends AppCompatActivity
 {
-    private static final int MENU_A = 100;
+   // private static final int MENU_A = 100;
    // private static final int MENU_GROUP = 10;
     Button button;
     private static String TAG = "MainActivity";
-    private Menu menu;
-    private static int menuId;
+//    private Menu menu;
+//    private static int menuId;
+    private MainActivity mainActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -30,39 +34,42 @@ public class MainActivity extends AppCompatActivity
 
         button = findViewById(R.id.button);
 
-        button.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                Log.d(TAG, "onClick: Inside Onclick ");
-                NewsSourceDownloader asyncObject = new NewsSourceDownloader();
-                asyncObject.execute();
-            }
-        });
+//        button.setOnClickListener(new View.OnClickListener()
+//        {
+//            @Override
+//            public void onClick(View v)
+//            {
+//                Log.d(TAG, "onClick: Inside Onclick ");
+//                NewsSourceDownloader asyncObject = new NewsSourceDownloader();
+//                asyncObject.execute();
+//            }
+//        });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu)
+//    {
+//        this.menu = menu;
+//        //create a reference to the item
+//        //fetch data from the api
+//        //get the count of the category as an int and let the for loop handle it
+//        for(int i = 0; i < 5; i++)
+//        {
+//            menu.add(Menu.NONE, menuId, 0, "Option " + (i+1));
+//        }
+//       return super.onCreateOptionsMenu(menu);
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item)
+//    {
+//        //show news of the particular category when the option is selected
+//        Toast.makeText(this, "You selected an item", Toast.LENGTH_SHORT).show();
+//        return super.onOptionsItemSelected(item);
+//    }
+
+    public void onPostDownload(Map<String, ArrayList<Source>> stringArrayListMap)
     {
-        this.menu = menu;
-        //create a reference to the item
-        //fetch data from the api
-        //get the count of the category as an int and let the for loop handle it
-        for(int i = 0; i < 5; i++)
-        {
-            menu.add(Menu.NONE, menuId, 0, "Option " + (i+1));
-        }
-       return super.onCreateOptionsMenu(menu);
+        Log.d(TAG, "onPostDownload:");
     }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item)
-    {
-        //show news of the particular category when the option is selected
-        Toast.makeText(this, "You selected an item", Toast.LENGTH_SHORT).show();
-        return super.onOptionsItemSelected(item);
-    }
-
-
 }
