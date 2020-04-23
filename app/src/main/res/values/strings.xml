@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">NewsGateway</string>
-    <string name="api_key">19084f873f6647ce84cc3790330842f0</string>
+    <string name="API_KEY">19084f873f6647ce84cc3790330842f0</string>
 </resources>
