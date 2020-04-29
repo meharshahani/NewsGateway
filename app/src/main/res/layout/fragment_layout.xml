@@ -31,19 +31,19 @@
 
         <TextView
             android:id="@+id/pageNumber"
-            android:layout_width="0dp"
-            android:textSize="18dp"
-            android:layout_height="wrap_content"
+            android:layout_width="410dp"
+            android:layout_height="53dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="12dp"
-            android:textAlignment="center"
             android:text="TextView"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintVertical_bias="1.0"
+            android:textAlignment="center"
+            android:textSize="18dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="parent"/>
+            app:layout_constraintTop_toBottomOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
