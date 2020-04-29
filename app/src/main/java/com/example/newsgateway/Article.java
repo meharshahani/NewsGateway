@@ -4,12 +4,13 @@ import java.io.Serializable;
 
 public class Article implements Serializable
 {
-    private String authorName;
-    private String title;
-    private String description;
-    private String url;
-    private String urlToImage;
-    private String publishedAt;
+   // public boolean title;
+    public String authorName;
+    public String title;
+    public String description;
+    public String url;
+    public String urlToImage;
+    public String publishedAt;
 
     Article(String authorName, String title, String description, String url, String urlToImage, String publishedAt)
     {

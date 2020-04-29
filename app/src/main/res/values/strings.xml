@@ -1,5 +1,14 @@
 <resources>
     <string name="app_name">NewsGateway</string>
-    <string name="api_url">"https://newsapi.org/v2/sources?language=en&amp;country=us&amp;category=apiKey="</string>
+    <string name="api_url">https://newsapi.org/v2/sources?language=en&amp;country=us&amp;category=&amp;apiKey=</string>
     <string name="API_KEY">19084f873f6647ce84cc3790330842f0</string>
+    <string name="INTENT_SERVICE">ACTION_MSG_TO_SVC</string>
+    <string name="INTENT_TO_MAIN">ACTION_MSG_TO_MAIN</string>
+    <string name="INTENT_MAIN"> ACTION_MSG_TO_MAIN</string>
+    <string name="START_URL" > https://newsapi.org/v2/everything?sources=</string>
+    <string name="END_URL">&amp;language=en&amp;pageSize=100&amp;apiKey= </string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="NEWS_CATEGORY">NEWS_CATEGORY</string>
+    <string name="HASHMAP">SOURCE_HASHMAP</string>
 </resources>

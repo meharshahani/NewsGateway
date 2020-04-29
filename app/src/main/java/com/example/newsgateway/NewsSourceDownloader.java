@@ -21,10 +21,7 @@ public class NewsSourceDownloader extends AsyncTask<Void, Void, Map<String, Arra
 {
 
     private MainActivity mainActivity;
-
-     private static String TAG = "AsyncActivity";
-
-      NewsSourceDownloader(MainActivity mainActivity)
+    NewsSourceDownloader(MainActivity mainActivity)
       {
           this.mainActivity = mainActivity;
       }
@@ -40,9 +37,9 @@ public class NewsSourceDownloader extends AsyncTask<Void, Void, Map<String, Arra
     }
 
     @Override
-    protected void onPostExecute(Map<String, ArrayList<Source>> stringArrayListMap)
+    protected void onPostExecute(Map<String, ArrayList<Source>> sourcesMap)
     {
-        mainActivity.onPostDownload(stringArrayListMap);
+        mainActivity.onPostSourceDownload(sourcesMap);
     }
 
     // get all the data from the api into a JSON object
@@ -64,7 +61,6 @@ public class NewsSourceDownloader extends AsyncTask<Void, Void, Map<String, Arra
             con.setRequestMethod("GET");
 
             InputStream inputStream = con.getInputStream();
-
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             String line;
             StringBuilder sb = new StringBuilder();
@@ -91,26 +87,26 @@ public class NewsSourceDownloader extends AsyncTask<Void, Void, Map<String, Arra
     {
         //this will store the array of JSON objects
         Map<String, ArrayList<Source>> sourcesMap = new TreeMap<>();
-
+        ArrayList<Source> allSources = new ArrayList<>();
         try
         {
             if(jsonObject.has("sources"))
             {
                 JSONArray sourcesArray = jsonObject.getJSONArray("sources");
-                for(int i = 0; i<=sourcesArray.length(); i++)
+                for(int i = 0; i < sourcesArray.length(); ++i)
                 {
                     //get each json object from the array
                     JSONObject sourceObject = sourcesArray.getJSONObject(i);
 
                     //look for the fields that we are interested in and check if it is null
                     String name = sourceObject.getString("name");
-                    if("name".equals(null))
-                        continue;
                     String id = sourceObject.getString("id");
-                    if("id".equals(null))
-                        continue;
                     String category = sourceObject.getString("category");
-                    if("category".equals((null)))
+                    if("null".equals(id))
+                        continue;
+                    if("null".equals(name))
+                        continue;
+                    if("null".equals((category)))
                         continue;
 
                     //make an object of the Source class
@@ -123,12 +119,12 @@ public class NewsSourceDownloader extends AsyncTask<Void, Void, Map<String, Arra
                         arrayList.add(source);
                         sourcesMap.put(source.getCategory(), arrayList);
                     }
-                    else
-                    {
-                        arrayList.add(source);
-                    }
+                    else arrayList.add(source);
+                    allSources.add(source);
                 }
+                sourcesMap.put("all", allSources);
             }
+
         }
         catch (JSONException e)
         {

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+<!--    <item-->
+<!--        app:actionViewClass="android.widget.SearchView"-->
+<!--        android:id="@+id/app_bar_search"-->
+<!--        android:icon="@drawable/ic"-->
+<!--        android:onClick="searchBar"-->
+<!--        android:title="Search"-->
+<!--        android:queryHint="Search Here"-->
+<!--        app:showAsAction="always" />-->
+<!--    <item-->
+<!--        android:id="@+id/menuAbout"-->
+<!--        android:icon="@drawable/help"-->
+<!--        android:title="about"-->
+<!--        app:showAsAction="always" />-->
+</menu>
